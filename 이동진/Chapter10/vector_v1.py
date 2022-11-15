@@ -1,0 +1,40 @@
+import math
+import reprlib
+from array import array
+
+
+class Vector:
+    typecode = 'd'
+
+    def __init__(self, components):
+        self._components = array(self.typecode, components)  # '보호된' 객체 속성
+
+    def __iter__(self):
+        return iter(self._components)
+
+    def __repr__(self):
+        class_name = type(self).__name__
+        components = reprlib.repr(self._components)  # 제한된 길이로 표현
+        components = components[components.find('['):-1]  # "arra('d'"와 마지막 괄호 제거
+        return f'{class_name}({components})'
+
+    def __str__(self):
+        return str(tuple(self))
+
+    def __bytes__(self):
+        return (bytes([ord(self.typecode)]) + bytes(self._components))
+
+    def __eq__(self, other):
+        return tuple(self) == tuple(other)
+
+    def __abs__(self):
+        return math.sqrt(sum(x * x for x in self))
+
+    def __bool__(self):
+        return bool(abs(self))
+
+    @classmethod
+    def frombytes(cls, octets):
+        typecode = chr(octets[0])
+        memv = memoryview(octets[1:]).cast(typecode)
+        return cls(memv)
