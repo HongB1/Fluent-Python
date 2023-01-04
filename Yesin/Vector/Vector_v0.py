@@ -1,5 +1,5 @@
-from array import array
 import math
+from array import array
 
 
 class Vector2d:

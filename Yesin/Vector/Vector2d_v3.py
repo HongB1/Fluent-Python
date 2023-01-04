@@ -1,6 +1,5 @@
-import math
 from array import array
-
+import math
 
 class Vector2d:
     typecode = 'd'
